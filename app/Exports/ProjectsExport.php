@@ -3,15 +3,18 @@
 namespace App\Exports;
 
 use App\Models\Project;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class ProjectsExport implements FromCollection
+class ProjectsExport implements FromView
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    public function view() : View
     {
-        return Project::all();
+        $projectData =  Project::with('responsible', 'departement', 'service', 'tasks')->latest()->get();
+
+        return view("projects.exceltable",[
+        "projects" => $projectData
+    ]);
     }
 }

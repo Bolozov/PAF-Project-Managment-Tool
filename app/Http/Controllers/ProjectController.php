@@ -233,9 +233,6 @@ class ProjectController extends AppBaseController
         $project->update($input);
         $project->users()->sync(array_values($users_ids));
 
-//        foreach ($users_ids as $user_id){
-//            if (!$projectTeam->contains($user_id)) dd('new member');
-//        }
 
         Flash::success('Projet mis à jour avec succès.');
 
@@ -255,7 +252,7 @@ class ProjectController extends AppBaseController
         $project = Project::find($id);
 
         if (empty($project)) {
-            Flash::error('Project not found');
+            Flash::error('Projet non trouvé ');
 
             return redirect(route('projects.index'));
         }
@@ -266,7 +263,7 @@ class ProjectController extends AppBaseController
         //Delete the project record.
         $project->delete();
 
-        Flash::success('Project deleted successfully.');
+        Flash::success('Projet supprimé avec succès.');
 
         return redirect(route('projects.index'));
     }
@@ -276,6 +273,7 @@ class ProjectController extends AppBaseController
      */
     public function export()
     {
+
         $fileName = 'Projet_PAF_' . now() . '.xlsx';
         return Excel::download(new ProjectsExport, $fileName);
     }
