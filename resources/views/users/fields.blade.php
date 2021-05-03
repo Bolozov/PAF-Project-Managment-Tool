@@ -1,12 +1,12 @@
 <!-- Name Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('name', __('models/users.fields.name').':') !!}
+    {!! Form::label('name', 'Nom d\'utilisateur :') !!}
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
 
 <!-- Email Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('email', __('models/users.fields.email').':') !!}
+    {!! Form::label('email', 'Email :') !!}
     {!! Form::email('email', null, ['class' => 'form-control']) !!}
 </div>
 <div class="form-group col-sm-6">
