@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             'view-departments',
             'view-tasks',
             'filter-tasks',
-            ]
+        ]
         ;
         foreach ($adminPermissions as $ap) {
             $permission = Permission::create(['name' => $ap]);
@@ -45,52 +45,15 @@ class DatabaseSeeder extends Seeder
         $adminUser = User::create([
             'name' => 'Admin',
             'email' => 'admin@paf.com',
-            'cin' => '150015000',
-            'password' => Hash::make('123123123'),
+            'cin' => "15015000",
+            'password' => Hash::make("123123123"),
         ]);
         $adminUser->assignRole($adminRole);
 
-        /** Chef de département */
-
-        $chefDepartmentRole = Role::create(['name' => 'Chef de département']);
-
-        $chefDepartmentUser = User::create([
-            'name' => 'Chef de département',
-            'email' => 'chefdepartement@paf.com',
-            'cin' => '10000001',
-            'password' => Hash::make('1234'),
-        ]);
-        $chefDepartmentUser->assignRole($chefDepartmentRole);
-        /** Chef de service */
-        $chefServiceRole = Role::create(['name' => 'Chef de service']);
-
-        $chefServicetUser = User::create([
-            'name' => 'Chef de service',
-            'email' => 'chefservice@paf.com',
-            'cin' => '10000002',
-            'password' => Hash::make('123123123'),
-        ]);
-        $chefServicetUser->assignRole($chefServiceRole);
-        /** Chef de Projet */
-        $chefProjetRole = Role::create(['name' => 'Chef de projet']);
-
-        $chefProjetUser = User::create([
-            'name' => 'Chef de Projet',
-            'cin' => '10000003',
-            'email' => 'chefprojet@paf.com',
-            'password' => Hash::make('123123123'),
-        ]);
-        $chefProjetUser->assignRole($chefProjetRole);
-
-        /** Utilisateur */
-        $userRole = Role::create(['name' => 'Utilisateur']);
-        $generalUser = User::create([
-            'name' => 'User',
-            'cin' => '10000004',
-            'email' => 'user@paf.com',
-            'password' => Hash::make('123123123'),
-        ]);
-        $generalUser->assignRole($userRole);
+        Role::create(['name' => 'Chef de département']);
+        Role::create(['name' => 'Chef de service']);
+        Role::create(['name' => 'Chef de projet']);
+        Role::create(['name' => 'Utilisateur']);
 
     }
 }

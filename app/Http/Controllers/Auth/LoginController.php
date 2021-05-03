@@ -44,13 +44,16 @@ class LoginController extends Controller
         return 'cin';
     }
 
-    protected function validateLogin(Request $request)
-    {
-        $this->validate($request, [
-            $this->username() => ['required', 'numeric', 'digits:8'],
-            'password' => ['required', 'string'],
-        ]);
-    }
+   protected function validateLogin(Request $request)
+   {
+
+       $this->validate($request, [
+           $this->username() => ['required', 'numeric', 'digits:8'],
+           'password' => ['required', 'string'],
+       ]);
+
+
+   }
 
     /**
      * Adding Last Login Time For Users
