@@ -4,12 +4,12 @@
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Responsible Id Field -->
+{{-- <!-- Responsible Id Field -->
 <div class="form-group col-sm-4">
     {!! Form::label('responsible_id', 'Résponsable:') !!}
     {!! Form::select('responsible_id', $users, null, ['class' => 'form-control']) !!}
 
-</div>
+</div> --}}
 
 <!-- Departement Id Field -->
 <div class="form-group col-sm-4">

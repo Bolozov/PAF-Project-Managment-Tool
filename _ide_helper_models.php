@@ -58,8 +58,13 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Departement|null $departement
+ * @property-read mixed $project_progress
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $projectFinishedTasks
+ * @property-read int|null $project_finished_tasks_count
  * @property-read \App\Models\User $responsible
  * @property-read \App\Models\Service|null $service
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Task[] $tasks
+ * @property-read int|null $tasks_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User[] $users
  * @property-read int|null $users_count
  * @method static \Database\Factories\ProjectFactory factory(...$parameters)
@@ -138,6 +143,44 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * Class Task
+ *
+ * @package App\Models
+ * @version April 21, 2021, 7:31 am UTC
+ * @property \App\Models\User $user
+ * @property Project $project
+ * @property string $name
+ * @property string $deadline
+ * @property integer $user_id
+ * @property integer $project_id
+ * @property string $status
+ * @property string $verification_file
+ * @property integer $budget
+ * @property string $note
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Database\Factories\TaskFactory factory(...$parameters)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereBudget($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereDeadline($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereNote($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereProjectId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Task whereVerificationFile($value)
+ */
+	class Task extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * Class User
  *
  * @package App\Models
@@ -159,6 +202,8 @@ namespace App\Models{
  * @property-read \App\Models\Departement|null $department
  * @property-read string $avatar_url
  * @property-read mixed $team_avatar_url
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
  * @property-read int|null $permissions_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Project[] $projects

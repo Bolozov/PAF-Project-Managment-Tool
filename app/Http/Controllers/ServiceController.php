@@ -37,9 +37,9 @@ class ServiceController extends AppBaseController
      */
     public function create()
     {
-        $users = User::role('Chef de service')->pluck('name', 'id');
+        //$users = User::role('Chef de service')->pluck('name', 'id');
 
-        return view('services.create')->with('users', $users);
+        return view('services.create');
     }
 
     /**

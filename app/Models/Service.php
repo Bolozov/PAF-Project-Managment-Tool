@@ -24,7 +24,7 @@ class Service extends Model
 
     public $fillable = [
         'name',
-        'responsible_id',
+
         'departement_id',
     ];
     protected $with = ['chefService', 'departement'];
@@ -48,7 +48,7 @@ class Service extends Model
      */
     public static $rules = [
         'name' => 'required',
-        'responsible_id' => 'required',
+
         'departement_id' => 'required',
     ];
 

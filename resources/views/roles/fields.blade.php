@@ -2,7 +2,7 @@
 <div class="form-group col-sm-6">
     {!! Form::label('name', 'Nom du rôle :') !!}
 
-    {!! Form::text('name', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
+    {!! Form::text('name', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255 , 'readonly' => 'readonly']) !!}
 </div>
 <div class="form-group col-sm-6">
     @if(Route::is('roles.edit'))
