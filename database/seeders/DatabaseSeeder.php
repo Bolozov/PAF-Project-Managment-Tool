@@ -36,7 +36,9 @@ class DatabaseSeeder extends Seeder
             'view-departments',
             'view-tasks',
             'filter-tasks',
+            'create-task',
         ]
+
         ;
         foreach ($adminPermissions as $ap) {
             $permission = Permission::create(['name' => $ap]);
