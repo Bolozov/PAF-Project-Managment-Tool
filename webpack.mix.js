@@ -15,7 +15,6 @@ mix.js('resources/js/app.js', 'public/js');
 mix.styles(['resources/js/app.js'], 'public/css/app.css').version();
 
 mix.styles([
-
     'public/css/owl.carousel.css',
     'public/css/owl.theme.css',
     'public/css/prism.css',

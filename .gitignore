@@ -15,3 +15,5 @@ yarn-error.log
 /.idea
 public/mix-manifest.json
 package-lock.json
+.ide_helper_models.php
+.ide_helper.php
