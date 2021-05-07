@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    Create Task
+    Créer une tâche
 @endsection
 @section('content')
     <section class="section">
         <div class="section-header">
             <h5 class="m-0">Nouvelle tâche </h5>
             <div class="filter-container section-header-breadcrumb row justify-content-md-end">
-                <a href="{{ route('tasks.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('tasks.index') }}" class="btn btn-primary">Retour</a>
             </div>
         </div>
         <div class="content">

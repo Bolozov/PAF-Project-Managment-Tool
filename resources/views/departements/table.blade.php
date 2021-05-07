@@ -48,9 +48,11 @@
                                             <div class="media">
                                                 <div class="media-icon"><i class="far fa-circle"></i></div>
                                                 <div class="media-body">
-                                                    <h6>{{$service->name }}</h6>
-                                                    <p>{{$service->chefService->name}}
-                                                        - {{ $service->chefService->email }}
+                                                    <h6>{{$service->name ?? '' }}</h6>
+                                                    <p>{{$service->chefService->name ?? ''}}
+
+                                                        - {{ $service->chefService->email ?? '' }}
+
                                                     </p>
                                                 </div>
                                             </div>

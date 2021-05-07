@@ -25,6 +25,20 @@
         </div>
     </div>
 </div>
+@section('page_js')
+<script>
+    // Javascript to enable link to tab
+    var hash = location.hash.replace(/^#/, ''); // ^ means starting, meaning only match the first hash
+    
+    if (hash) {
+        $('.nav-pills a[href="#' + hash + '"]').tab('show');
+
+    }
+
+</script>
+
+@endsection
+
 
 
 

@@ -11,7 +11,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($tasks as $task)
+        @forelse($tasks as $task)
             <tr>
                 <td>{{ $task->name }}</td>
                 <td>{{ $task->deadline->format('d/m/Y') }}</td>
@@ -56,7 +56,14 @@
                     {!! Form::close() !!}
                 </td>
             </tr>
-        @endforeach
+        @empty
+        <tr >
+            <td colspan="100%" class="text-center">Aucune tâche trouvée.</td>
+
+
+
+        </tr>
+        @endforelse
         </tbody>
     </table>
     <div class="float-right">

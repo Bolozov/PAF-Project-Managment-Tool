@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    New department
+    Nouveau département
 @endsection
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h3 class="page__heading m-0">New department</h3>
+            <h3 class="page__heading m-0">Nouveau département</h3>
             <div class="filter-container section-header-breadcrumb row justify-content-md-end">
-                <a href="{{ route('departements.index') }}" class="btn btn-primary">@lang('crud.back')</a>
+                <a href="{{ route('departements.index') }}" class="btn btn-primary">Retour</a>
             </div>
         </div>
         <div class="content">

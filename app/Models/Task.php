@@ -76,6 +76,7 @@ class Task extends Model
         'project_id' => 'required|integer',
         'budget' => 'required|integer',
         'note' => 'string'
+        
 
     ];
 

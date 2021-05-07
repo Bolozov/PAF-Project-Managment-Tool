@@ -55,10 +55,6 @@ class ServiceController extends AppBaseController
 
         /** @var Service $service */
         $service = Service::create($input);
-        $user = User::find($service->responsible_id);
-        $user->departement_id = $service->departement_id;
-        $user->service_id = $service->id;
-        $user->save();
 
         Flash::success('Service créé avec succès.');
 

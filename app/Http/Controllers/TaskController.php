@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Controllers\AppBaseController;
 use App\Http\Traits\ProjectTrait;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-use App\Notifications\ProjectAssigned;
+use App\Notifications\TaskAssigned;
+use App\Notifications\TaskSubmittedForValidation;
 use Exception;
+use Flash;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Flash;
-use Response;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\TaskAssigned;
-use App\Notifications\TaskSubmittedForValidation;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Notification;
+use Response;
 
 class TaskController extends AppBaseController
 {
@@ -49,7 +47,6 @@ class TaskController extends AppBaseController
             })->latest()
                 ->paginate(5);
 
-
         } elseif (auth()->user()->hasRole('Chef de service')) {
             $tasks = Task::when($search != null, function ($query) use ($search) {
                 $query->where('status', 'LIKE', "%{$search}%");
@@ -73,13 +70,12 @@ class TaskController extends AppBaseController
                 ->where('status', 'LIKE', "%{$search}%")
                 ->paginate(5);
         }
-        if (count($tasks) == 0) {
+        // if (count($tasks) == 0) {
 
-            Flash::error("Aucun résultat trouvé correspondant au terme recherché.");
+        //     Flash::error("Aucun résultat trouvé correspondant au terme recherché.");
 
-            return redirect(route('tasks.index'));
-        }
-
+        //     return route('tasks.index');
+        // }
 
         return view('tasks.index')->with('tasks', $tasks);
     }
@@ -110,11 +106,12 @@ class TaskController extends AppBaseController
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public
-    function store(CreateTaskRequest $request)
+    public function store(CreateTaskRequest $request)
     {
+        
 
         $input = $request->all();
+        
         $input['status'] = "créé";
         /** @var Task $task */
         $task = Task::create($input);
@@ -130,11 +127,9 @@ class TaskController extends AppBaseController
 
         Notification::send($user, new TaskAssigned($task));
 
-
         Flash::success('Tâche ajoutée avec succès.');
 
         return redirect()->back();
-//        return redirect(route('tasks.index'));
     }
 
     /**
@@ -144,8 +139,7 @@ class TaskController extends AppBaseController
      *
      * @return Response
      */
-    public
-    function show($id)
+    public function show($id)
     {
         /** @var Task $task */
         $task = Task::find($id);
@@ -166,8 +160,7 @@ class TaskController extends AppBaseController
      *
      * @return Factory|View
      */
-    public
-    function edit($id)
+    public function edit($id)
     {
         /** @var Task $task */
         $task = Task::find($id);
@@ -193,8 +186,7 @@ class TaskController extends AppBaseController
      *
      * @return Response
      */
-    public
-    function update($id, UpdateTaskRequest $request)
+    public function update($id, UpdateTaskRequest $request)
     {
         /** @var Task $task */
         $task = Task::find($id);
@@ -222,8 +214,7 @@ class TaskController extends AppBaseController
      * @throws Exception
      *
      */
-    public
-    function destroy($id)
+    public function destroy($id)
     {
         /** @var Task $task */
         $task = Task::find($id);
@@ -241,15 +232,14 @@ class TaskController extends AppBaseController
         return redirect(route('tasks.index'));
     }
 
-    public
-    function startTask($id)
+    public function startTask($id)
     {
-        Task::findOrFail($id)->update(['status' => 'en cours']);
-        return redirect()->back();
+        $task = Task::findOrFail($id);
+        $task->update(['status' => 'en cours']);
+        return redirect('/projects/'.$task->project->id.'#tasks' );
     }
 
-    public
-    function validateTask($id)
+    public function validateTask($id)
     {
         $task = Task::findOrFail($id);
 
@@ -259,12 +249,11 @@ class TaskController extends AppBaseController
     /**
      * Submit a validation request
      */
-    public
-    function submitValidationFile(Request $request, $id)
+    public function submitValidationFile(Request $request, $id)
     {
         $task = Task::findOrFail($id);
         $request->validate([
-            'verification_file' => 'required|mimes:png,jpg,jpeg,pdf|max:2048'
+            'verification_file' => 'required|max:2048',
         ]);
         if ($file = $request->file('verification_file')) {
             $name = 'fichier_tache_' . $task->id . time() . '_' . $file->getClientOriginalName();
@@ -272,8 +261,8 @@ class TaskController extends AppBaseController
 
             $task->update(['verification_file' => 'taskVerification/' . $name, 'status' => 'en attente de validation']);
 
-            //$projectManager = $task->project->responsible;
-            $projectManager = User::role('Admin')->take('1')->get();
+            $projectManager = $task->project->responsible;
+            //$projectManager = User::role('Admin')->take('1')->get();
 
             Notification::send($projectManager, new TaskSubmittedForValidation($task));
 
@@ -296,7 +285,7 @@ class TaskController extends AppBaseController
 
         Task::findOrFail($id)->update(['status' => 'validée']);
         Flash::success("Tâche validée.");
-        return redirect()->back();
+        return redirect()->view('projects.details.tasks');
 
     }
 

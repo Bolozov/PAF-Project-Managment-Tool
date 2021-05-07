@@ -5,20 +5,19 @@ namespace App\Http\Controllers;
 use App\Exports\ProjectsExport;
 use App\Http\Requests\CreateProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
+use App\Http\Traits\ProjectTrait;
 use App\Models\Departement;
 use App\Models\Project;
 use App\Models\Service;
-use App\Models\Task;
 use App\Models\User;
 use App\Notifications\ProjectAssigned;
 use Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use Maatwebsite\Excel\Facades\Excel;
-use Response;
-use App\Http\Traits\ProjectTrait;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
-
+use Maatwebsite\Excel\Facades\Excel;
+use PDF;
+use Response;
 
 class ProjectController extends AppBaseController
 {
@@ -39,7 +38,6 @@ class ProjectController extends AppBaseController
             ->withCount('tasks')
             ->latest()
             ->paginate(5);
-
 
         return view('projects.index')
             ->with('projects', $projects);
@@ -76,7 +74,6 @@ class ProjectController extends AppBaseController
         $users_ids = array_map('intval', $input['users_id']);
         unset($input["users_id"]);
 
-
         /** @var Project $project */
         $project = Project::create($input);
         $project->users()->attach($users_ids);
@@ -87,7 +84,6 @@ class ProjectController extends AppBaseController
         $users = User::find($users_ids);
 
         Notification::send($users, new ProjectAssigned($project));
-
 
         Flash::success('Projet créé avec succès.');
 
@@ -114,7 +110,6 @@ class ProjectController extends AppBaseController
         }
         $leftBalance = $this->getLeftBalance($project);
         // $projectProgress = $this->getProjectProgress($project);
-
 
         $chart_options = [
             'chart_title' => 'Tasks by Status',
@@ -143,7 +138,6 @@ class ProjectController extends AppBaseController
             'where_raw' => 'project_id = ' . $project->id,
             //'where_raw' => "status like 'validée'"
 
-
         ];
 
         $tasksLineChart = new LaravelChart($chart_options);
@@ -162,7 +156,6 @@ class ProjectController extends AppBaseController
 
             'group_by_field' => 'created_at',
             'group_by_period' => 'day',
-
 
             'filter_field' => 'updated_at',
             'filter_days' => 30, // show only tasks for last 30 days
@@ -233,7 +226,6 @@ class ProjectController extends AppBaseController
         $project->update($input);
         $project->users()->sync(array_values($users_ids));
 
-
         Flash::success('Projet mis à jour avec succès.');
 
         return redirect(route('projects.index'));
@@ -278,6 +270,24 @@ class ProjectController extends AppBaseController
         return Excel::download(new ProjectsExport, $fileName);
     }
 
+    public function exportToPDF()
+    {
+        $projects = Project::with('responsible', 'departement', 'service', 'tasks')->latest()->get();
 
+        view()->share('projects', $projects);
+
+        $pdf = PDF::loadView('projects.pdftable')->setPaper('a4', 'landscape');
+        
+        // download PDF file with download method
+        return $pdf->download('Projet_PAF_' . now() . '.pdf');
+
+    }
+    public function testview()
+    {
+        $projects = Project::with('responsible', 'departement', 'service', 'tasks')->latest()->get();
+        view()->share('projects', $projects);
+        return view('projects.pdftable');
+
+    }
 
 }

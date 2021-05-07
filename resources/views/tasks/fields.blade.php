@@ -28,8 +28,10 @@
 </div>
 <div class="form-group col-sm-12 col-md-12 mb-4">
     {!! Form::label('note', 'Notes de tâche:') !!}
+    {!! Form::textarea('note', null, ['cols'=> "30" , 'rows'=>"10"]) !!}
 
-    {!! Form::textarea('note',null,[]) !!}
+
+
 </div>
 
 
@@ -49,18 +51,21 @@
 @section('page_js')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <script>
-    $('#note').summernote({
-        blockquoteBreakingLevel: 2
-        , tabsize: 2
-        , height: 100
-        , toolbar: [
-            ['style', ['bold', 'italic', 'underline', 'clear']]
-            , ['font', ['fontname', 'strikethrough']]
-            , ['fontsize', ['fontsize']]
-            , ['color', ['color']]
-            , ['para', ['ul', 'ol', 'paragraph', 'style']]
-            , ['height', ['height']]
-        ],
+    $(document).ready(function() {
+        $("#note").summernote({
+
+            height: 300
+            , toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']]
+                , ['font', ['strikethrough', 'superscript', 'subscript']]
+                , ['fontsize', ['fontsize']]
+                , ['color', ['color']]
+                , ['para', ['ul', 'ol', 'paragraph']]
+                , ['height', ['height']]
+            ]
+
+        });
 
 
     });

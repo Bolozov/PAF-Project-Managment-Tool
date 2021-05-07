@@ -32,23 +32,21 @@ class UserController extends AppBaseController
      * @return Factory|View
      */
 
-
-
     public function index(Request $request)
     {
 
         /** @var User $users */
 
-        if ( auth()->user()->hasRole('Admin')) {
+        if (auth()->user()->hasRole('Admin')) {
             $users = User::with('department', 'service')->paginate(5);
-        } elseif ( auth()->user()->hasRole('Chef de département') &&  auth()->user()->can('view-users')) {
+        } elseif (auth()->user()->hasRole('Chef de département') && auth()->user()->can('view-users')) {
             $users = User::with('department', 'service')
-                ->where('departement_id',  auth()->user()->departement_id)
+                ->where('departement_id', auth()->user()->departement_id)
                 ->paginate(5);
-        } elseif ( auth()->user()->hasRole('Chef de service') && auth()->user()->can('view-users')) {
+        } elseif (auth()->user()->hasRole('Chef de service') && auth()->user()->can('view-users')) {
             $users = User::with('service')
-                ->where('service_id',  auth()->user()->service_id)
-                ->where('departement_id',  auth()->user()->departement_id)
+                ->where('service_id', auth()->user()->service_id)
+                ->where('departement_id', auth()->user()->departement_id)
                 ->paginate(5);
         } else {
             abort(403);
@@ -63,10 +61,10 @@ class UserController extends AppBaseController
      */
     public function create()
     {
-        if (!auth()->user()->can('create-users')){
+        if (!auth()->user()->can('create-users')) {
             abort(403);
         }
-            $roles = Role::pluck('name', 'name')->all();
+        $roles = Role::pluck('name', 'name')->all();
         $departments = Departement::pluck('name', 'id')->all();
         $services = Service::pluck('name', 'id')->all();
         return view('users.create', compact('roles', 'departments', 'services'));
@@ -103,6 +101,22 @@ class UserController extends AppBaseController
             }
 
         }
+        if ($request->input('role') == "Chef de service") {
+            $service = Service::find($request->input('service_id'));
+
+            if (is_null($service->responsible_id) || $service->responsible_id == '') {
+                $service->responsible_id = $user->id;
+                $service->save();
+            } else {
+                $oldResponsible = User::find($service->responsible_id);
+                DB::table('model_has_roles')->where('model_id', $service->responsible_id)->delete();
+                $oldResponsible->syncRoles('Utilisateur');
+                $service->responsible_id = $user->id;
+                $service->save();
+            }
+
+        }
+
         Flash::success('Utilisateur ' . $user->name . ' créé avec succès.');
 
         return redirect(route('users.index'));
@@ -260,8 +274,8 @@ class UserController extends AppBaseController
     public function markNotificationAsRead($notificationId = null)
     {
         !is_null($notificationId) ?
-            DB::table('notifications')->where('id', $notificationId)->update(['read_at' => now()]) :
-            Auth::user()->unreadNotifications->markAsRead();
+        DB::table('notifications')->where('id', $notificationId)->update(['read_at' => now()]) :
+        Auth::user()->unreadNotifications->markAsRead();
         return redirect()->back();
     }
 }

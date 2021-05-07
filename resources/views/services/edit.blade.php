@@ -1,13 +1,13 @@
 @extends('layouts.app')
 @section('title')
-    Edit Service
+    Modifier un Service
 @endsection
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h3 class="page__heading m-0">Edit Service</h3>
+            <h3 class="page__heading m-0">Modifier un Service</h3>
             <div class="filter-container section-header-breadcrumb row justify-content-md-end">
-                <a href="{{ route('services.index') }}" class="btn btn-primary">Back</a>
+                <a href="{{ route('services.index') }}" class="btn btn-primary">Retour</a>
             </div>
         </div>
         <div class="content">
