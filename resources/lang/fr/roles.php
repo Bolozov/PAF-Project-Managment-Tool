@@ -16,4 +16,5 @@ return array(
     'view-departments' => 'voir les départements',
     'view-tasks' => 'voir les tâches',
     'filter-tasks' => 'filtrage des tâches',
+    'create-task' => 'créer une tâche'
 );

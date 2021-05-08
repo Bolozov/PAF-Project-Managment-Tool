@@ -24,9 +24,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('users', App\Http\Controllers\UserController::class);
     /** Departments Routes */
+    Route::get('departements/exportToPDF/', [App\Http\Controllers\DepartementController::class, 'exportToPDF'])->name('departements.exportToPDF');
     Route::resource('departements', App\Http\Controllers\DepartementController::class);
 
     /** Services Routes */
+    Route::get('services/exportToPDF/', [App\Http\Controllers\ServiceController::class, 'exportToPDF'])->name('services.exportToPDF');
     Route::resource('services', App\Http\Controllers\ServiceController::class);
 
     /** Projects Routes */
@@ -43,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/task/{id}/validate/', [App\Http\Controllers\TaskController::class, 'submitValidationFile'])->name('task.submit-validation');
     Route::resource('tasks', App\Http\Controllers\TaskController::class);
     /** Roles And Permissions Routes */
+    Route::get('roles/exportToPDF/', [App\Http\Controllers\RoleController::class, 'exportToPDF'])->name('roles.exportToPDF')->middleware(['role:Admin']);
     Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware(['role:Admin']);
 
     /**Testing The Downloadable View */

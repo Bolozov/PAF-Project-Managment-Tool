@@ -16,6 +16,13 @@
             <div class="card card-primary">
                 <div class="card-header">
                     <h4 class="text-dark ">Liste des services</h4>
+                    <div class="card-header-action">
+
+                        <a href="{{ route('services.exportToPDF') }}" class="form-btn btn btn-icon icon-left btn-primary  "><i class="fas fa-file-pdf"></i>
+                            Exporter en PDF</a>
+
+                    </div>
+
                 </div>
                 <div class="card-body">
                     @include('services.table')

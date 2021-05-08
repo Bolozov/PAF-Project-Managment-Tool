@@ -2,7 +2,7 @@
     <table class="table" id="services-table">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Nom du Service</th>
                 <th>Résponsable</th>
                 <th>Département</th>
                 <th colspan="3">Action</th>
@@ -38,13 +38,7 @@
 
 @section('page_js')
 <script>
-    //    document.getElementsByClassName("delete-btn").addEventListener("click", confirmDelete);
-
-
-
-
-
-    function confirmDelete(event) {
+   function confirmDelete(event) {
         event.preventDefault();
         console.log('confirm delete triggered');
         Swal.fire({

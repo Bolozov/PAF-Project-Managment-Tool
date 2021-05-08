@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Flash;
 use Illuminate\Http\Request;
+use PDF;
 use Response;
 
 class DepartementController extends AppBaseController
@@ -155,5 +156,17 @@ class DepartementController extends AppBaseController
         Flash::success('Le département est supprimé.');
 
         return redirect(route('departements.index'));
+    }
+    public function exportToPDF()
+    {
+        $departements = Departement::with('chefDepartement', 'services', 'users')->paginate(5);
+
+        view()->share('departements', $departements);
+
+        $pdf = PDF::loadView('departements.pdftable')->setPaper('a4', 'landscape');
+
+        // download PDF file with download method
+        return $pdf->download('Départements_PAF_' . now() . '.pdf');
+
     }
 }

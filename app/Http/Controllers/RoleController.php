@@ -8,9 +8,10 @@ use App\Http\Requests\UpdateRoleRequest;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laracasts\Flash\Flash;
-use Illuminate\Http\Request;
+use PDF;
 use Response;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -171,4 +172,17 @@ class RoleController extends AppBaseController
 
         return redirect(route('roles.index'));
     }
+    public function exportToPDF()
+    {
+        $roles = Role::with('permissions')->get();
+
+        view()->share('roles', $roles);
+
+        $pdf = PDF::loadView('roles.pdftable')->setPaper('a4', 'landscape');
+
+        // download PDF file with download method
+        return $pdf->download('Roles_PAF_' . now() . '.pdf');
+
+    }
+
 }

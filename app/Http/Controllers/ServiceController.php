@@ -11,6 +11,7 @@ use Exception;
 use Flash;
 use Illuminate\Http\Request;
 use Response;
+use PDF;
 
 class ServiceController extends AppBaseController
 {
@@ -156,5 +157,17 @@ class ServiceController extends AppBaseController
         Flash::success('Sservice supprimé avec succès.');
 
         return redirect(route('services.index'));
+    }
+     public function exportToPDF()
+    {
+        $services = Service::latest()->get();
+
+        view()->share('services', $services);
+
+        $pdf = PDF::loadView('services.pdftable')->setPaper('a4', 'landscape');
+
+        // download PDF file with download method
+        return $pdf->download('Services_PAF_' . now() . '.pdf');
+
     }
 }
