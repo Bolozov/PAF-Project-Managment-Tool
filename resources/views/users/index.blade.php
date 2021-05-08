@@ -18,14 +18,8 @@ Utilisateurs
 
             <div class="card-header">
                 <h4 class="text-dark ">Liste des utilisateurs</h4>
-                <div class="card-header-action">
-                    <a href="{{ route('users.exportToPDF') }}" class="form-btn btn btn-icon icon-left btn-primary  "><i class="fas fa-file-pdf"></i>
-                        Exporter en PDF</a>
-                </div>
 
                 <form class="card-header-form" action="{{ route('user.search') }}" method="GET">
-
-
                     <div class="input-group">
                         <input type="text" name="search" class="form-control" placeholder="Nom , Email , CIN ..">
                         <div class="input-group-btn">
@@ -33,6 +27,12 @@ Utilisateurs
                         </div>
                     </div>
                 </form>
+                <div class="card-header-action ml-3">
+                    <a href="{{ route('users.exportToPDF') }}" class="form-btn btn btn-icon icon-left btn-primary  "><i class="fas fa-file-pdf"></i>
+                        Exporter en PDF</a>
+                </div>
+
+
             </div>
 
             <div class="card-body">
