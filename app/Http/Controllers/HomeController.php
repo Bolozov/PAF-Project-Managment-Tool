@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Request;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
-
 
 class HomeController extends Controller
 {
-
 
     /**
      * Show the application dashboard.
@@ -45,14 +43,13 @@ class HomeController extends Controller
                 ->whereNotNull('last_login_at')
                 ->count('id');
 
-                $chartsContion = 'departement_id = '. auth()->user()->departement_id;
-
+            $chartsContion = 'departement_id = ' . auth()->user()->departement_id;
 
         } elseif (auth()->user()->hasRole('Chef de service')) {
             $projectCount = Project::where(['departement_id', auth()->user()->departement_id],
                 ['service_id', auth()->user()->service_id])
                 ->count('id');
-                $chartsContion = 'departement_id = '. auth()->user()->departement_id . ' service_id = ' . auth()->user()->service_id ;
+            $chartsContion = 'departement_id = ' . auth()->user()->departement_id . ' service_id = ' . auth()->user()->service_id;
 
         } elseif (auth()->user()->hasRole('Chef de projet')) {
             $projectCount = Project::where(['departement_id', auth()->user()->departement_id],
@@ -70,8 +67,8 @@ class HomeController extends Controller
             'group_by_field' => 'created_at',
             'group_by_period' => 'month',
             'chart_type' => 'bar',
-            'where_raw' => $chartsContion
-            
+            'where_raw' => $chartsContion,
+
         ];
         $projectsByMonth = new LaravelChart($chart_options);
 
@@ -83,8 +80,8 @@ class HomeController extends Controller
             'chart_type' => 'pie',
             'filter_field' => 'created_at',
             'filter_period' => 'month',
-            'where_raw' => $chartsContion
-            
+            'where_raw' => $chartsContion,
+
         ];
         $projectStatusByMonth = new LaravelChart($chart_options);
 
@@ -94,18 +91,30 @@ class HomeController extends Controller
             'report_type' => 'group_by_relationship',
             'model' => 'App\Models\Project',
 
-            'relationship_name' => 'departement', 
-            'group_by_field' => 'name', 
+            'relationship_name' => 'departement',
+            'group_by_field' => 'name',
 
             'aggregate_function' => 'count',
             'aggregate_field' => 'name',
 
             'filter_field' => 'created_at',
-            'filter_days' => 30, 
+            'filter_days' => 30,
             'filter_period' => 'week',
         ];
         $projectsByDepartment = new LaravelChart($chart_options);
 
-            return view('home', compact("projectCount", "tasksCount", "totalBudget" , "usersCount" , "actifUsersCount" , "projectsByMonth" , "projectStatusByMonth" , "projectsByDepartment"));
+        $projectsEndingThisWeek = Project::with('responsible', 'departement')
+            ->whereDate('end_date_project', '<=', Carbon::now()->endOfWeek()->format('Y-m-d'))
+            ->whereNotIn('status_project', ['validé', 'annulé'])
+            ->latest()
+            ->get();
+
+        $tasksEndingThisWeek = Task::whereDate('deadline', '<=', Carbon::now()->endOfWeek()->format('Y-m-d'))
+            ->whereNotIn('status', ['validée'])
+            ->latest()
+            ->get();
+
+
+        return view('home', compact("tasksEndingThisWeek","projectsEndingThisWeek", "projectCount", "tasksCount", "totalBudget", "usersCount", "actifUsersCount", "projectsByMonth", "projectStatusByMonth", "projectsByDepartment"));
     }
 }
