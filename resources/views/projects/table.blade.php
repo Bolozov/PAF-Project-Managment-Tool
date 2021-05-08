@@ -76,7 +76,8 @@
 
 
                 <td class=" text-center">
-                    {!! Form::open(['route' => ['projects.destroy', $project->id], 'method' => 'delete']) !!}
+                    {!! Form::open(['route' => ['projects.destroy', $project->id], 'method' => 'delete' , 'id' => 'deleteForm']) !!}
+
                     <div class='btn-group'>
                         <a href="{!! route('projects.task.create', [$project->id]) !!}"
                            class='btn btn-primary action-btn ' data-toggle="tooltip" title=""
@@ -88,7 +89,8 @@
                         <a href="{!! route('projects.edit', [$project->id]) !!}"
                            class='btn btn-warning action-btn edit-btn ' data-toggle="tooltip" title=""
                            data-original-title="Modifier le projet"><i class="fa fa-edit"></i></a>
-                        {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger action-btn delete-btn', 'onclick' => 'return confirm("Voulez-vous vraiment supprimer cet enregistrement ? cette action est IRRÉVERSIBLE.")' ,  "data-toggle" => "tooltip" ,  "data-placement" => "top" , "data-original-title" => "Supprimez ce projet et tous les enregistrements associés."]) !!}
+                        {!! Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger action-btn delete-btn', 'onclick' => 'confirmDelete(event)']) !!}
+
                     </div>
                     {!! Form::close() !!}
                 </td>
@@ -102,3 +104,30 @@
 
 
 </div>
+@section('page_js')
+<script>
+    function confirmDelete(event) {
+        event.preventDefault();
+        console.log('confirm delete triggered');
+        Swal.fire({
+            title: 'Êtes-vous sûr?'
+            , text: "Cette action est IRRÉVERSIBLE!"
+            , icon: 'warning'
+            , showCancelButton: true
+            , confirmButtonColor: '#3085d6'
+            , cancelButtonColor: '#d33'
+            , confirmButtonText: 'Supprimer'
+            , cancelButtonText: 'Annuler'
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.querySelector('#deleteForm').submit();
+
+            }
+        })
+    }
+
+</script>
+
+@endsection
+

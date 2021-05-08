@@ -15,9 +15,10 @@ class AddDepartmentAndServiceIdToProjects extends Migration
     {
         Schema::table('projects', function (Blueprint $table) {
             $table->after('status_project', function ($table) {
-                $table->foreignId('departement_id')->nullable()->constrained('departements');
-                $table->foreignId('service_id')->nullable()->constrained('services');
+                $table->foreignId('departement_id')->nullable()->constrained('departements')->onDelete('set null');
+                $table->foreignId('service_id')->nullable()->constrained('services')->onDelete('set null');
             });
+
         });
     }
 
