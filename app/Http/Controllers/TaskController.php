@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\AppBaseController;
-use App\Http\Requests\CreateTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
-use App\Http\Traits\ProjectTrait;
-use App\Models\Project;
+use Flash;
+use Response;
+use PDF;
+use Exception;
 use App\Models\Task;
 use App\Models\User;
-use App\Notifications\TaskAssigned;
-use App\Notifications\TaskSubmittedForValidation;
-use Exception;
-use Flash;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
+use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Http\Traits\ProjectTrait;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\TaskAssigned;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use App\Http\Requests\CreateTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Controllers\AppBaseController;
 use Illuminate\Support\Facades\Notification;
-use Response;
+use App\Notifications\TaskSubmittedForValidation;
 
 class TaskController extends AppBaseController
 {
@@ -108,10 +109,10 @@ class TaskController extends AppBaseController
      */
     public function store(CreateTaskRequest $request)
     {
-        
+
 
         $input = $request->all();
-        
+
         $input['status'] = "créé";
         /** @var Task $task */
         $task = Task::create($input);
@@ -286,6 +287,19 @@ class TaskController extends AppBaseController
         Task::findOrFail($id)->update(['status' => 'validée']);
         Flash::success("Tâche validée.");
         return redirect()->view('projects.details.tasks');
+
+    }
+
+    public function exportToPDF()
+    {
+        $tasks = Task::latest()->get();
+
+        view()->share('tasks', $tasks);
+
+        $pdf = PDF::loadView('tasks.pdftable')->setPaper('a4', 'landscape');
+
+        // download PDF file with download method
+        return $pdf->download('Taches_PAF_' . now() . '.pdf');
 
     }
 

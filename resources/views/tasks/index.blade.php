@@ -14,10 +14,15 @@
                 <div class="card-header">
                     <h4 class="text-dark">Liste des tâches</h4>
                     @can('filter-tasks')
-                        
+
                     <div class="card-header-action">
+                                        <a href="{{ route('tasks.exportToPDF') }}" class="form-btn btn btn-icon icon-left btn-primary  "><i class="fas fa-file-pdf"></i>
+
+                                            Exporter en PDF</a>
+
+
                         <div class="dropdown">
-                            <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown" aria-expanded="false">Filtre</a>
+                            <a href="#" class="dropdown-toggle btn btn-success" data-toggle="dropdown" aria-expanded="false">Filtre</a>
                             <div class="dropdown-menu dropdown-menu-right" x-placement="bottom-end" style="position: absolute; transform: translate3d(68px, 26px, 0px); top: 0px; left: 0px; will-change: transform;">
                                 <a href="{{ route('tasks.index' , ["search" => 'créé']) }}" class="dropdown-item has-icon"><i class="fas fa-circle text-primary"></i> Créé</a>
                                 <a href="{{ route('tasks.index' , ["search" => 'en cours']) }}" class="dropdown-item has-icon"><i class="fas fa-circle text-info"></i> En cours</a>

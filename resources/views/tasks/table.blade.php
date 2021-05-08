@@ -2,7 +2,7 @@
     <table class="table" id="tasks-table">
         <thead>
         <tr>
-            <th>Name</th>
+            <th>Nom de la tâche</th>
             <th>Date limite</th>
             <th>Assigné à</th>
             <th>Projet</th>

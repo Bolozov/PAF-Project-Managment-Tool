@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/tasks/start/{id}', [App\Http\Controllers\TaskController::class, 'startTask'])->name('projects.task.start');
 
     /** Tasks Routes */
+    Route::get('tasks/exportToPDF/', [App\Http\Controllers\TaskController::class, 'exportToPDF'])->name('tasks.exportToPDF');
     Route::get('/task/{id}/validate/', [App\Http\Controllers\TaskController::class, 'validateTask'])->name('task.validate');
     Route::get('/task/{id}/perform-validation/', [App\Http\Controllers\TaskController::class, 'performValidation'])->name('task.perform-validation');
     Route::post('/task/{id}/validate/', [App\Http\Controllers\TaskController::class, 'submitValidationFile'])->name('task.submit-validation');
@@ -42,7 +43,6 @@ Route::middleware(['auth'])->group(function () {
     /** Roles And Permissions Routes */
     Route::resource('roles', App\Http\Controllers\RoleController::class)->middleware(['role:Admin']);
 
-
     /**Testing The Downloadable View */
-    Route::get('/tableview' , [App\Http\Controllers\ProjectController::class, 'testview']);
+    Route::get('/tableview', [App\Http\Controllers\ProjectController::class, 'testview']);
 });
