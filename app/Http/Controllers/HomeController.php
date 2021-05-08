@@ -104,17 +104,16 @@ class HomeController extends Controller
         $projectsByDepartment = new LaravelChart($chart_options);
 
         $projectsEndingThisWeek = Project::with('responsible', 'departement')
-            ->whereDate('end_date_project', '<=', Carbon::now()->endOfWeek()->format('Y-m-d'))
+            ->whereBetween('end_date_project', [Carbon::now()->startOfWeek()->format('Y-m-d') , Carbon::now()->endOfWeek()->format('Y-m-d')])
             ->whereNotIn('status_project', ['validé', 'annulé'])
             ->latest()
             ->get();
 
-        $tasksEndingThisWeek = Task::whereDate('deadline', '<=', Carbon::now()->endOfWeek()->format('Y-m-d'))
+        $tasksEndingThisWeek = Task::whereBetween('deadline', [Carbon::now()->startOfWeek()->format('Y-m-d') , Carbon::now()->endOfWeek()->format('Y-m-d')])
             ->whereNotIn('status', ['validée'])
             ->latest()
             ->get();
 
-
-        return view('home', compact("tasksEndingThisWeek","projectsEndingThisWeek", "projectCount", "tasksCount", "totalBudget", "usersCount", "actifUsersCount", "projectsByMonth", "projectStatusByMonth", "projectsByDepartment"));
+        return view('home', compact("tasksEndingThisWeek", "projectsEndingThisWeek", "projectCount", "tasksCount", "totalBudget", "usersCount", "actifUsersCount", "projectsByMonth", "projectStatusByMonth", "projectsByDepartment"));
     }
 }

@@ -72,7 +72,12 @@
                     <tbody>
 
                     @forelse($project->tasks as $task)
-                        <tr class="{{ today()->format('Y-m-d') > $task->deadline->format('Y-m-d')  ? 'table-danger' : ''   }}">
+                        <tr class="{{ today()->format('Y-m-d') > $task->deadline->format('Y-m-d')  ? 'table-danger' : ''}}
+                        {{ $task->deadline->format('Y-m-d') <= \Carbon\Carbon::now()->endOfWeek()->format('Y-m-d') && $task->deadline->format('Y-m-d') >= \Carbon\Carbon::now()->startOfWeek()->format('Y-m-d') ? 'table-warning' : ''   }}">
+
+
+
+
                             <td>{{$task->name}}</td>
                             <td>
                                 {{ number_format($task->budget, 1, ',', ' ') }}

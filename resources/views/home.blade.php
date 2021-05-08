@@ -76,6 +76,7 @@ Dashboard
                 </div>
             </div>
         </div>
+        @role('Admin')
         <div class="row">
             <div class="col-md-6">
                 <div class="card card-hero">
@@ -136,7 +137,7 @@ Dashboard
                             @forelse ( $tasksEndingThisWeek as $endingTask)
                             <a href="{{ route('tasks.show' , $endingTask->id) }}" class="ticket-item">
                                 <div class="ticket-title">
-                                    <h4 >{{ $endingTask->name }}</h4>
+                                    <h4>{{ $endingTask->name }}</h4>
                                 </div>
                                 <div class="ticket-info">
                                     <div data-toggle="tooltip" title="Projet">{{ $endingTask->project->name_project ?? '' }}</div>
@@ -150,7 +151,7 @@ Dashboard
                             <p>Rien à afficher.</p>
                             @endforelse
                             <a href="{{ route('tasks.index') }}" class="ticket-item ticket-more">
-                               Afficher Toutes Les Tâches <i class="fas fa-chevron-right"></i>
+                                Afficher Toutes Les Tâches <i class="fas fa-chevron-right"></i>
                             </a>
                         </div>
                     </div>
@@ -159,6 +160,8 @@ Dashboard
 
 
         </div>
+
+        @endrole
         <div class="row">
             <div class="col-lg-6">
                 <div class="card">
@@ -182,6 +185,8 @@ Dashboard
             </div>
         </div>
         @if(auth()->user()->hasRole('Admin'))
+        {{-- <button onclick="PrintAllChart()">Print All Charts</button> --}}
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
@@ -203,4 +208,43 @@ Dashboard
 {!! $projectsByMonth->renderJs() !!}
 {!! $projectStatusByMonth->renderJs() !!}
 {!! $projectsByDepartment->renderJs() !!}
+{{-- <script src="{{ asset('assets/js/jspdf.umd.min.js') }}"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+
+
+<script>
+    function PrintAllChart() {
+        const dateObj = new Date()
+        const monthNumber = dateObj.getMonth()
+        const year = dateObj.getFullYear()
+
+
+        var nouveaux_projets_chaque_mois = document.getElementById("nouveaux_projets_chaque_mois");
+        var etat_des_projets = document.getElementById("etat_des_projets");
+        var projets_par_departement = document.getElementById("projets_par_departement");
+        var imgData = nouveaux_projets_chaque_mois.toDataURL()
+        var doc = new jsPDF()
+
+        doc.setFontSize(40)
+        doc.text(35, 25, 'Paranyan loves jsPDF')
+        doc.addImage(imgData, 'JPEG', 15, 40, 180, 160)
+        doc.save('Test.pdf');
+
+
+        /**var win = window.open();
+
+        win.document.write("Nouveaux projets chaque mois : <br><img src='" + nouveaux_projets_chaque_mois.toDataURL() + "' />");
+
+
+        win.document.write("État des projets - " + monthNumber + '/' + year + " : <br><img src='" + etat_des_projets.toDataURL() + "' />");
+
+
+        win.document.write("Projets par département : <br><img src='" + projets_par_departement.toDataURL() + "' />");
+
+        win.print();
+        win.location.reload();*/
+    }
+
+</script>
 @endsection
