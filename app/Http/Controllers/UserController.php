@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Hash;
 use Laracasts\Flash\Flash;
 use Response;
 use Spatie\Permission\Models\Role;
+use PDF;
 
 class UserController extends AppBaseController
 {
@@ -277,5 +278,17 @@ class UserController extends AppBaseController
         DB::table('notifications')->where('id', $notificationId)->update(['read_at' => now()]) :
         Auth::user()->unreadNotifications->markAsRead();
         return redirect()->back();
+    }
+
+    public function exportToPDF()
+    {
+        $users = User::with('department', 'service')->latest()->get();
+        view()->share('users', $users);
+
+        $pdf = PDF::loadView('users.pdftable')->setPaper('a4', 'landscape');
+
+        // download PDF file with download method
+        return $pdf->download('Utilisateurs_PAF_' . now() . '.pdf');
+
     }
 }

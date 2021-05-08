@@ -20,6 +20,8 @@ Route::middleware(['auth'])->group(function () {
 
     /** Users Routes */
     Route::get('users/search', [App\Http\Controllers\UserController::class, 'search'])->name('user.search');
+    Route::get('users/exportToPDF/', [App\Http\Controllers\UserController::class, 'exportToPDF'])->name('users.exportToPDF');
+
     Route::resource('users', App\Http\Controllers\UserController::class);
     /** Departments Routes */
     Route::resource('departements', App\Http\Controllers\DepartementController::class);
