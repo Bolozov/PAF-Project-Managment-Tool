@@ -10,8 +10,8 @@ use App\Models\User;
 use Exception;
 use Flash;
 use Illuminate\Http\Request;
-use Response;
 use PDF;
+use Response;
 
 class ServiceController extends AppBaseController
 {
@@ -152,13 +152,20 @@ class ServiceController extends AppBaseController
             return redirect(route('services.index'));
         }
 
-        $service->delete();
+        try {
+            $service->delete();
+        } catch (\Exception $e) {
+            Flash::error('L\'opération a échouée. Ce service a des projets associés à lui.');
 
-        Flash::success('Sservice supprimé avec succès.');
+            return redirect(route('services.index'));
+
+        }
+
+        Flash::success('Service supprimé avec succès.');
 
         return redirect(route('services.index'));
     }
-     public function exportToPDF()
+    public function exportToPDF()
     {
         $services = Service::latest()->get();
 
